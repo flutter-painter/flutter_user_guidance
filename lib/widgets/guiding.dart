@@ -3,7 +3,7 @@ import 'package:flutter_user_guidance/models/models.dart';
 import 'package:flutter_user_guidance/widgets/guidance_controller.dart';
 
 class GuidingWidget extends StatefulWidget {
-  final List<GuideVisual> guideExts;
+  final List<GuideVisualAndSound> guideExts;
   final GuidanceController controller;
   final Duration duration;
   const GuidingWidget({
@@ -72,6 +72,9 @@ class _GuidingWidgetState extends State<GuidingWidget> {
                       builder: (context, value, child) {
                         final userGuide = widget.guideExts[value.step];
 
+                        if (widget.guideExts[value.step].playSound != null) {
+                          widget.guideExts[value.step].playSound();
+                        }
                         return AnimatedPositioned.fromRect(
                           duration: widget.duration,
                           rect: userGuide.rect,
@@ -91,13 +94,12 @@ class _GuidingWidgetState extends State<GuidingWidget> {
               child: ValueListenableBuilder<GuidanceValue>(
                 valueListenable: _controller,
                 builder: (context, value, child) {
-                  final guideChild = widget.guideExts[value.step].widget;
-
+                  final userGuide = widget.guideExts[value.step];
                   return AnimatedSwitcher(
                     duration: widget.duration,
                     child: SizedBox(
                       key: ValueKey<int>(value.step),
-                      child: guideChild,
+                      child: userGuide.guidingText,
                     ),
                   );
                 },

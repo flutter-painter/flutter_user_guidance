@@ -1,17 +1,31 @@
 import 'package:flutter/material.dart';
 
-class GuideVisual {
+class Guide {}
+
+class GuideVisualAndSound extends GuideVisual {
+  void Function() playSound;
+
+  GuideVisualAndSound.rect(Rect rect, Widget guidingText, {this.playSound})
+      : super.rect(rect, guidingText);
+  GuideVisualAndSound.circle(Rect rect, Widget guidingText, {this.playSound})
+      : super.circle(rect, guidingText);
+  GuideVisualAndSound.custom(Rect rect, Widget guidingText,
+      {Decoration decoration, this.playSound})
+      : super.custom(rect, guidingText, decoration: decoration);
+}
+
+class GuideVisual extends Guide {
   final Rect rect;
   final Decoration decoration;
-  final Widget widget;
-  const GuideVisual._(this.rect, this.decoration, this.widget);
+  final Widget guidingText;
+  GuideVisual._(this.rect, this.decoration, this.guidingText);
 
   /// Create a custom [Guide2] instance.
   /// NOTICE: To take effect set any color e.g. [Colors.white].
-  const GuideVisual.custom(Rect rect, Widget widget, {Decoration decoration})
+  GuideVisual.custom(Rect rect, Widget widget, {Decoration decoration})
       : this._(rect, decoration, widget);
 
-  const GuideVisual.rect(Rect rect, Widget widget)
+  GuideVisual.rect(Rect rect, Widget widget)
       : this._(
             rect,
             const BoxDecoration(
@@ -20,7 +34,7 @@ class GuideVisual {
             ),
             widget);
 
-  const GuideVisual.circle(Rect rect, Widget widget)
+  GuideVisual.circle(Rect rect, Widget widget)
       : this._(
             rect,
             const BoxDecoration(

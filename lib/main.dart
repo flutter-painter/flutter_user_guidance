@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter User Guide Demo',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: HomePageWithGuiding(),
+      home: const HomePageWithGuiding(),
     );
   }
 }

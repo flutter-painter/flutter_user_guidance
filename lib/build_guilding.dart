@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_user_guidance/sound.dart';
 import 'package:flutter_user_guidance/models/guide.dart';
 
 const classicTextStyle =
     TextStyle(fontWeight: FontWeight.w500, fontSize: 18, color: Colors.white);
 
-List<GuideVisual> buildGuiding(MediaQueryData media) {
-  final guidExt = GuideVisual.rect(
+List<GuideVisualAndSound> buildGuiding(MediaQueryData media) {
+  final guidExt = GuideVisualAndSound.rect(
     Rect.fromLTWH(
       0.0,
       0.0,
@@ -21,9 +22,10 @@ List<GuideVisual> buildGuiding(MediaQueryData media) {
         style: classicTextStyle,
       ),
     ),
+    playSound: () => Sound.playSound(),
   );
 
-  final guidExt2 = GuideVisual.rect(
+  final guidExt2 = GuideVisualAndSound.rect(
       Rect.fromLTWH(
         0.0,
         media.viewPadding.top,
@@ -39,5 +41,5 @@ List<GuideVisual> buildGuiding(MediaQueryData media) {
           style: classicTextStyle,
         ),
       ));
-  return <GuideVisual>[guidExt, guidExt2];
+  return <GuideVisualAndSound>[guidExt, guidExt2];
 }
