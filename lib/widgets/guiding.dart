@@ -1,75 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_user_guidance/models/models.dart';
+import 'package:flutter_user_guidance/widgets/guidance_controller.dart';
 
-class GuidanceValue {
-  const GuidanceValue._([
-    this.visible = false,
-    this.step = 0,
-  ]);
-
-  const GuidanceValue.initial() : this._();
-
-  const GuidanceValue.custom({
-    bool visible,
-    int step,
-  }) : this._(visible, step);
-
-  final bool visible;
-  final int step;
-}
-
-class GuidanceController extends ValueNotifier<GuidanceValue> {
-  GuidanceController() : super(GuidanceValue.initial());
-
-  void show({int from = 0}) {
-    value = GuidanceValue.custom(
-      visible: true,
-      step: from,
-    );
-  }
-
-  void next() {
-    value = GuidanceValue.custom(
-      visible: value.visible,
-      step: value.step + 1,
-    );
-  }
-
-  void hide() {
-    value = GuidanceValue.custom(
-      visible: false,
-      step: value.step,
-    );
-  }
-}
-
-class Guidance extends StatefulWidget {
-  const Guidance({
-    Key key,
-    @required this.guides,
-    @required this.children,
-    this.controller,
-    this.duration = const Duration(milliseconds: 250),
-  })  : assert(
-          guides.length > 0,
-          'Property "guides" should have at least one element',
-        ),
-        assert(
-          guides.length == children.length,
-          'Property "children" and "guides" should be the same size.',
-        ),
-        super(key: key);
-
-  final List<Guide> guides;
-  final List<Widget> children;
+class GuidingWidget extends StatefulWidget {
+  final List<GuideVisual> guideExts;
   final GuidanceController controller;
   final Duration duration;
+  const GuidingWidget({
+    Key key,
+    @required this.guideExts,
+    this.controller,
+    this.duration = const Duration(milliseconds: 250),
+  })  : assert(guideExts.length > 0,
+            'Property "guides" should have at least one element'),
+        super(key: key);
 
   @override
-  _GuidanceState createState() => _GuidanceState();
+  _GuidingWidgetState createState() => _GuidingWidgetState();
 }
 
-class _GuidanceState extends State<Guidance> {
+class _GuidingWidgetState extends State<GuidingWidget> {
   GuidanceController _controller;
 
   @override
@@ -120,7 +70,7 @@ class _GuidanceState extends State<Guidance> {
                     ValueListenableBuilder<GuidanceValue>(
                       valueListenable: widget.controller,
                       builder: (context, value, child) {
-                        final userGuide = widget.guides[value.step];
+                        final userGuide = widget.guideExts[value.step];
 
                         return AnimatedPositioned.fromRect(
                           duration: widget.duration,
@@ -141,7 +91,7 @@ class _GuidanceState extends State<Guidance> {
               child: ValueListenableBuilder<GuidanceValue>(
                 valueListenable: _controller,
                 builder: (context, value, child) {
-                  final guideChild = widget.children[value.step];
+                  final guideChild = widget.guideExts[value.step].widget;
 
                   return AnimatedSwitcher(
                     duration: widget.duration,
@@ -160,7 +110,7 @@ class _GuidanceState extends State<Guidance> {
   }
 
   void _handlePressed() {
-    if (widget.controller.value.step + 1 < widget.guides.length) {
+    if (widget.controller.value.step + 1 < widget.guideExts.length) {
       widget.controller.next();
     } else {
       widget.controller.hide();

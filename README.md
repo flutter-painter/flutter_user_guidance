@@ -7,3 +7,6 @@ An example of user guidance in Flutter.
 ## Demo
 
 [![PREVIEW](./PREVIEW.png)](https://youtu.be/iFIH_YusrKQ)
+
+use to run example
+flutter run -d macos -t example/main.dart
